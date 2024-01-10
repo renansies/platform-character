@@ -1,5 +1,5 @@
 using UnityEngine;
-[RequireComponent(typeof(InputController), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
 public class WallInteractor : MonoBehaviour
 {
 
@@ -16,7 +16,7 @@ public class WallInteractor : MonoBehaviour
 
     private CollisionDataRetriever collisionDataRetriever;
     private Rigidbody2D body;
-    private InputController input;
+    private Controller controller;
     private Vector2 velocity;
     private bool onWall;
     private bool onGround;
@@ -29,7 +29,7 @@ public class WallInteractor : MonoBehaviour
     {
         collisionDataRetriever = GetComponent<CollisionDataRetriever>();
         body = GetComponent<Rigidbody2D>();
-        input = GetComponent<InputController>();
+        controller = GetComponent<Controller>();
     }
 
     // Update is called once per frame
@@ -37,7 +37,7 @@ public class WallInteractor : MonoBehaviour
     {
         if(onWall && ! onGround)
         {
-            desiredJump |= input.RetrieveJumpInput();
+            desiredJump |= controller.input.RetrieveJumpInput(this.gameObject);
         }
     }
 
@@ -66,13 +66,13 @@ public class WallInteractor : MonoBehaviour
         }
         if (desiredJump)
         {
-            if (-wallDirectionX == input.RetrieveMoveInput())
+            if (-wallDirectionX == controller.input.RetrieveMoveInput(this.gameObject))
             {
                 velocity = new Vector2(wallJumpClimb.x * wallDirectionX, wallJumpClimb.y);
                 WallJumping = true;
                 desiredJump = false;
             }
-            else if (input.RetrieveMoveInput() == 0)
+            else if (controller.input.RetrieveMoveInput(this.gameObject) == 0)
             {
                 velocity = new Vector2(wallJumpBounce.x * wallDirectionX, wallJumpBounce.y);
                 WallJumping = true;
@@ -93,7 +93,7 @@ public class WallInteractor : MonoBehaviour
             if (wallStickCounter > 0)
             {
                 velocity.x = 0;
-                if (input.RetrieveMoveInput() == collisionDataRetriever.ContactNormal.x)
+                if (controller.input.RetrieveMoveInput(this.gameObject) == collisionDataRetriever.ContactNormal.x)
                 {
                     wallStickCounter -= Time.deltaTime;
                 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(InputController), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
 public class Move : MonoBehaviour
 {
     [SerializeField, Range(0f, 100f)] private float maxSpeed = 4f;
@@ -11,7 +11,7 @@ public class Move : MonoBehaviour
     private Vector2 desiredVelocity;
     private Vector2 velocity;
     private Rigidbody2D body;
-    private InputController input;
+    private Controller controller;
     private CollisionDataRetriever ground;
 
     private float maxSpeedChange;
@@ -23,13 +23,13 @@ public class Move : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<CollisionDataRetriever>();
-        input = GetComponent<InputController>();
+        controller = GetComponent<Controller>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        direction.x = input.RetrieveMoveInput();
+        direction.x = controller.input.RetrieveMoveInput(this.gameObject);
         desiredVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - ground.Friction, 0f);
     }
 

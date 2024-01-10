@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(InputController), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
 public class Jump : MonoBehaviour
 {
 
@@ -13,7 +13,7 @@ public class Jump : MonoBehaviour
 
     private Rigidbody2D body;
     private CollisionDataRetriever ground;
-    private InputController input;
+    private Controller controller;
     private Vector2 velocity;
 
     private int jumpPhase;
@@ -31,7 +31,7 @@ public class Jump : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<CollisionDataRetriever>();
-        input = GetComponent<InputController>();
+        controller = GetComponent<Controller>();
 
         defaultGravityScale = 1f;
     }
@@ -65,11 +65,11 @@ public class Jump : MonoBehaviour
         {
             JumpAction();
         }
-        if (input.RetrieveJumpHoldInput() && body.velocity.y > 0)
+        if (controller.input.RetrieveJumpHoldInput(this.gameObject) && body.velocity.y > 0)
         {
             body.gravityScale = upwardMovementMultiplier;
         }
-        else if (!input.RetrieveJumpHoldInput() || body.velocity.y < 0)
+        else if (!controller.input.RetrieveJumpHoldInput(this.gameObject) || body.velocity.y < 0)
         {
             body.gravityScale = downwardMovementMultiplier;
         }
@@ -84,7 +84,7 @@ public class Jump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        desiredJump |= input.RetrieveJumpInput();
+        desiredJump |= controller.input.RetrieveJumpInput(this.gameObject);
     }
 
     private void JumpAction()
