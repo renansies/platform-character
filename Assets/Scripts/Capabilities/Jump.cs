@@ -1,9 +1,9 @@
 using UnityEngine;
 
+[RequireComponent(typeof(InputController), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
 public class Jump : MonoBehaviour
 {
 
-    [SerializeField] private InputController input = null;
     [SerializeField, Range(0f, 10f)] private float jumpHeight = 3f;
     [SerializeField, Range(0, 5)] private int maxAirJumps = 0;
     [SerializeField, Range(0f, 5f)] private float downwardMovementMultiplier = 3f;
@@ -13,6 +13,7 @@ public class Jump : MonoBehaviour
 
     private Rigidbody2D body;
     private CollisionDataRetriever ground;
+    private InputController input;
     private Vector2 velocity;
 
     private int jumpPhase;
@@ -30,6 +31,7 @@ public class Jump : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<CollisionDataRetriever>();
+        input = GetComponent<InputController>();
 
         defaultGravityScale = 1f;
     }
@@ -96,7 +98,7 @@ public class Jump : MonoBehaviour
 
             jumpBufferCounter = 0;
             coyoteCounter = 0;
-            jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight);
+            jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight * upwardMovementMultiplier);
             isJumping = true;
 
             if (velocity.y > 0f)

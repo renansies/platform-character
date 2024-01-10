@@ -1,9 +1,8 @@
 using UnityEngine;
-
+[RequireComponent(typeof(InputController), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
 public class WallInteractor : MonoBehaviour
 {
 
-    [SerializeField] private InputController input = null;
     public bool WallJumping { get; private set; }
 
     [Header("Wall Slide")]
@@ -12,20 +11,25 @@ public class WallInteractor : MonoBehaviour
     [SerializeField] private Vector2 wallJumpClimb = new Vector2(4f, 12f);
     [SerializeField] private Vector2 wallJumpBounce = new Vector2(10.7f, 10f);
     [SerializeField] private Vector2 wallJumpLeap = new Vector2(14f, 12f);
+    [SerializeField, Range(0.05f, 0.5f)] private float wallStickTime = 0.25f;
+
 
     private CollisionDataRetriever collisionDataRetriever;
     private Rigidbody2D body;
+    private InputController input;
     private Vector2 velocity;
     private bool onWall;
     private bool onGround;
     private bool desiredJump;
     private float wallDirectionX;
+    private float wallStickCounter;
 
     // Start is called before the first frame update
     void Start()
     {
         collisionDataRetriever = GetComponent<CollisionDataRetriever>();
         body = GetComponent<Rigidbody2D>();
+        input = GetComponent<InputController>();
     }
 
     // Update is called once per frame
@@ -79,6 +83,28 @@ public class WallInteractor : MonoBehaviour
                 velocity = new Vector2(wallJumpLeap.x * wallDirectionX, wallJumpLeap.y);
                 WallJumping = true;
                 desiredJump = false;
+            }
+        }
+        #endregion
+
+        #region Wall Stick
+        if (collisionDataRetriever.OnWall && !collisionDataRetriever.OnGround && !WallJumping)
+        {
+            if (wallStickCounter > 0)
+            {
+                velocity.x = 0;
+                if (input.RetrieveMoveInput() == collisionDataRetriever.ContactNormal.x)
+                {
+                    wallStickCounter -= Time.deltaTime;
+                }
+                else
+                {
+                    wallStickCounter = wallStickTime;
+                }
+            }
+            else
+            {
+                wallStickCounter = wallStickTime;
             }
         }
         #endregion
