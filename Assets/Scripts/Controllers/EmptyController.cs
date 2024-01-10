@@ -6,7 +6,7 @@ public class EmptyController : InputController
 {
     public override float RetrieveMoveInput()
     {
-        return 1f;
+        return 0f;
     }
     public override bool RetrieveJumpInput()
     {
