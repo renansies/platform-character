@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Move : MonoBehaviour
@@ -14,7 +12,7 @@ public class Move : MonoBehaviour
     private Vector2 desiredVelocity;
     private Vector2 velocity;
     private Rigidbody2D body;
-    private Ground ground;
+    private CollisionDataRetriever ground;
 
     private float maxSpeedChange;
     private float acceleration;
@@ -24,7 +22,7 @@ public class Move : MonoBehaviour
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        ground = GetComponent<Ground>();
+        ground = GetComponent<CollisionDataRetriever>();
     }
 
     // Update is called once per frame

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Jump : MonoBehaviour
@@ -14,7 +12,7 @@ public class Jump : MonoBehaviour
     [SerializeField, Range(0f, 0.3f)] private float jumpBufferTime = 0.2f;
 
     private Rigidbody2D body;
-    private Ground ground;
+    private CollisionDataRetriever ground;
     private Vector2 velocity;
 
     private int jumpPhase;
@@ -31,7 +29,7 @@ public class Jump : MonoBehaviour
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        ground = GetComponent<Ground>();
+        ground = GetComponent<CollisionDataRetriever>();
 
         defaultGravityScale = 1f;
     }
@@ -95,7 +93,7 @@ public class Jump : MonoBehaviour
             {
                 jumpPhase += 1;
             }
-            
+
             jumpBufferCounter = 0;
             coyoteCounter = 0;
             jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight);
