@@ -44,11 +44,11 @@ public class Jump : MonoBehaviour
             desiredJump = false;
             JumpAction();
         }
-        if (body.velocity.y > 0)
+        if (input.RetrieveJumpHoldInput() && body.velocity.y > 0)
         {
             body.gravityScale = upwardMovementMultiplier;
         }
-        else if (body.velocity.y < 0)
+        else if (!input.RetrieveJumpHoldInput() || body.velocity.y < 0)
         {
             body.gravityScale = downwardMovementMultiplier;
         }
