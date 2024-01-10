@@ -11,6 +11,7 @@ public class WallInteractor : MonoBehaviour
     [Header("WallJump")]
     [SerializeField] private Vector2 wallJumpClimb = new Vector2(4f, 12f);
     [SerializeField] private Vector2 wallJumpBounce = new Vector2(10.7f, 10f);
+    [SerializeField] private Vector2 wallJumpLeap = new Vector2(14f, 12f);
 
     private CollisionDataRetriever collisionDataRetriever;
     private Rigidbody2D body;
@@ -70,7 +71,13 @@ public class WallInteractor : MonoBehaviour
             else if (input.RetrieveMoveInput() == 0)
             {
                 velocity = new Vector2(wallJumpBounce.x * wallDirectionX, wallJumpBounce.y);
-               WallJumping = true;
+                WallJumping = true;
+                desiredJump = false;
+            }
+            else
+            {
+                velocity = new Vector2(wallJumpLeap.x * wallDirectionX, wallJumpLeap.y);
+                WallJumping = true;
                 desiredJump = false;
             }
         }
