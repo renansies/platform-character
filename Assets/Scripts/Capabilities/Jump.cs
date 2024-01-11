@@ -24,6 +24,7 @@ public class Jump : MonoBehaviour
     private bool desiredJump;
     private bool onGround;
     private bool isJumping;
+    private bool isJumpReset;
 
 
     // Start is called before the first frame update
@@ -33,6 +34,7 @@ public class Jump : MonoBehaviour
         ground = GetComponent<CollisionDataRetriever>();
         controller = GetComponent<Controller>();
 
+        isJumpReset = true;
         defaultGravityScale = 1f;
     }
 
@@ -51,25 +53,30 @@ public class Jump : MonoBehaviour
         {
             coyoteCounter -= Time.deltaTime;
         }
-        if (desiredJump)
+        if (desiredJump && isJumpReset)
         {
+            isJumpReset = false;
             desiredJump = false;
             jumpBufferCounter = jumpBufferTime;
         }
-        else if (!desiredJump && jumpBufferCounter > 0)
+        else if (jumpBufferCounter > 0)
         {
             jumpBufferCounter -= Time.deltaTime;
+        }
+        else if (!desiredJump)
+        {
+            isJumpReset = true;
         }
 
         if (jumpBufferCounter > 0)
         {
             JumpAction();
         }
-        if (controller.input.RetrieveJumpHoldInput(this.gameObject) && body.velocity.y > 0)
+        if (controller.input.RetrieveJumpInput(this.gameObject) && body.velocity.y > 0)
         {
             body.gravityScale = upwardMovementMultiplier;
         }
-        else if (!controller.input.RetrieveJumpHoldInput(this.gameObject) || body.velocity.y < 0)
+        else if (!controller.input.RetrieveJumpInput(this.gameObject) || body.velocity.y < 0)
         {
             body.gravityScale = downwardMovementMultiplier;
         }
@@ -84,7 +91,7 @@ public class Jump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        desiredJump |= controller.input.RetrieveJumpInput(this.gameObject);
+        desiredJump = controller.input.RetrieveJumpInput(this.gameObject);
     }
 
     private void JumpAction()

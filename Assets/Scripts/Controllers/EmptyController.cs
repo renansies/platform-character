@@ -12,8 +12,4 @@ public class EmptyController : InputController
     {
         return false;
     }
-    public override bool RetrieveJumpHoldInput(GameObject gameObject)
-    {
-        return false;
-    }
 }

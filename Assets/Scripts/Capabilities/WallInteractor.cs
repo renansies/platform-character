@@ -21,6 +21,7 @@ public class WallInteractor : MonoBehaviour
     private bool onWall;
     private bool onGround;
     private bool desiredJump;
+    private bool isJumpReset;
     private float wallDirectionX;
     private float wallStickCounter;
 
@@ -30,15 +31,14 @@ public class WallInteractor : MonoBehaviour
         collisionDataRetriever = GetComponent<CollisionDataRetriever>();
         body = GetComponent<Rigidbody2D>();
         controller = GetComponent<Controller>();
+
+        isJumpReset = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(onWall && ! onGround)
-        {
-            desiredJump |= controller.input.RetrieveJumpInput(this.gameObject);
-        }
+        desiredJump = controller.input.RetrieveJumpInput(this.gameObject);
     }
 
     private void FixedUpdate()
@@ -64,25 +64,35 @@ public class WallInteractor : MonoBehaviour
         {
             WallJumping = false;
         }
-        if (desiredJump)
+        if(onWall && ! onGround)
         {
-            if (-wallDirectionX == controller.input.RetrieveMoveInput(this.gameObject))
+            if (desiredJump && isJumpReset)
             {
-                velocity = new Vector2(wallJumpClimb.x * wallDirectionX, wallJumpClimb.y);
-                WallJumping = true;
-                desiredJump = false;
+                if (controller.input.RetrieveMoveInput(this.gameObject) == 0)
+                {
+                    velocity = new Vector2(wallJumpBounce.x * wallDirectionX, wallJumpBounce.y);
+                    WallJumping = true;
+                    desiredJump = false;
+                    isJumpReset = false;
+                }
+                else if (Mathf.Sign(-wallDirectionX) == Mathf.Sign(controller.input.RetrieveMoveInput(this.gameObject)))
+                {
+                    velocity = new Vector2(wallJumpClimb.x * wallDirectionX, wallJumpClimb.y);
+                    WallJumping = true;
+                    desiredJump = false;
+                    isJumpReset = false;
+                }
+                else
+                {
+                    velocity = new Vector2(wallJumpLeap.x * wallDirectionX, wallJumpLeap.y);
+                    WallJumping = true;
+                    desiredJump = false;
+                    isJumpReset = false;
+                }
             }
-            else if (controller.input.RetrieveMoveInput(this.gameObject) == 0)
+            else if (!desiredJump)
             {
-                velocity = new Vector2(wallJumpBounce.x * wallDirectionX, wallJumpBounce.y);
-                WallJumping = true;
-                desiredJump = false;
-            }
-            else
-            {
-                velocity = new Vector2(wallJumpLeap.x * wallDirectionX, wallJumpLeap.y);
-                WallJumping = true;
-                desiredJump = false;
+                isJumpReset = true;
             }
         }
         #endregion
@@ -93,7 +103,7 @@ public class WallInteractor : MonoBehaviour
             if (wallStickCounter > 0)
             {
                 velocity.x = 0;
-                if (controller.input.RetrieveMoveInput(this.gameObject) == collisionDataRetriever.ContactNormal.x)
+                if (controller.input.RetrieveMoveInput(this.gameObject) != 0 && Mathf.Sign(controller.input.RetrieveMoveInput(this.gameObject)) == Mathf.Sign(collisionDataRetriever.ContactNormal.x))
                 {
                     wallStickCounter -= Time.deltaTime;
                 }
@@ -107,6 +117,7 @@ public class WallInteractor : MonoBehaviour
                 wallStickCounter = wallStickTime;
             }
         }
+        Debug.Log(wallStickCounter);
         #endregion
 
         body.velocity = velocity;
@@ -115,6 +126,7 @@ public class WallInteractor : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         collisionDataRetriever.EvaluateCollision(collision);
+        isJumpReset = false;
 
         if (collisionDataRetriever.OnWall && !collisionDataRetriever.OnGround && WallJumping)
         {
