@@ -37,4 +37,9 @@ public class AIController : InputController
     {
         return false;
     }
+
+    public override bool RetrieveRunInput(GameObject gameObject)
+    {
+        return false;
+    }
 }

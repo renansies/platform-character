@@ -14,6 +14,7 @@ public class Jump : MonoBehaviour
     private Rigidbody2D body;
     private CollisionDataRetriever ground;
     private Controller controller;
+    private AbilityHolder abilityHolder;
     private Vector2 velocity;
 
     private int jumpPhase;
@@ -33,6 +34,7 @@ public class Jump : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<CollisionDataRetriever>();
         controller = GetComponent<Controller>();
+        abilityHolder = GetComponent<AbilityHolder>();
 
         isJumpReset = true;
         defaultGravityScale = 1f;
@@ -112,7 +114,11 @@ public class Jump : MonoBehaviour
             {
                 jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
             }
-            velocity.y += jumpSpeed; 
+            velocity.y += jumpSpeed;
+            if (abilityHolder.Ability?.GetType() == typeof(HighJumpAbility))
+            {
+                abilityHolder.TriggerAbility(); 
+            }
         }
     }
 }

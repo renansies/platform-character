@@ -6,6 +6,7 @@ public class PlayerController : InputController
 {
     private PlayerInputActions inputActions;
     private bool isJumping;
+    private bool isRunning;
 
     private void OnEnable()
     {
@@ -13,6 +14,8 @@ public class PlayerController : InputController
         inputActions.GamePlay.Enable();
         inputActions.GamePlay.Jump.started += JumpStarted;
         inputActions.GamePlay.Jump.canceled += JumpCanceled;
+        inputActions.GamePlay.Run.started += RunStarted;
+        inputActions.GamePlay.Run.canceled += RunCanceled;
     }
 
     private void OnDisable()
@@ -20,6 +23,8 @@ public class PlayerController : InputController
         inputActions.GamePlay.Disable();
         inputActions.GamePlay.Jump.started -= JumpStarted;
         inputActions.GamePlay.Jump.canceled -= JumpCanceled;
+        inputActions.GamePlay.Run.started -= RunStarted;
+        inputActions.GamePlay.Run.canceled -= RunCanceled;
         inputActions = null;
     }
 
@@ -39,5 +44,18 @@ public class PlayerController : InputController
     public override float RetrieveMoveInput(GameObject gameObject)
     {
         return inputActions.GamePlay.Move.ReadValue<Vector2>().x;
+    }
+
+    private void RunStarted(CallbackContext obj)
+    {
+        isRunning = true;
+    }
+    private void RunCanceled(CallbackContext obj)
+    {
+        isRunning = false;
+    }
+    public override bool RetrieveRunInput(GameObject gameObject)
+    {
+        return isRunning;
     }
 }

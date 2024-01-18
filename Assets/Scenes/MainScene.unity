@@ -997,6 +997,7 @@ GameObject:
   - component: {fileID: 560053034}
   - component: {fileID: 560053035}
   - component: {fileID: 560053036}
+  - component: {fileID: 560053037}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -1363,6 +1364,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 11400000, guid: cf8920989c6734f7ca3ef4bf4eeb70f7, type: 2}
+--- !u!114 &560053037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560053025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 187d46d6d9c3e4b759c07f07b579212d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBuffer: 5
+  collisionDataRetriever: {fileID: 0}
+  body: {fileID: 0}
+  controller: {fileID: 0}
+  velocity: {x: 0, y: 0}
+  onGround: 0
+  isRunning: 0
 --- !u!1 &694589496
 GameObject:
   m_ObjectHideFlags: 0
