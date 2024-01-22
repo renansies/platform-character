@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Abilities.Attributes
 {
-    [CreateAssetMenu(menuName = "Abilities/HighJump", fileName = "High Jump Ability")]
-    public class HighJumpAbility : BaseAbility
+    [CreateAssetMenu(menuName = "Abilities/Run", fileName = "Run")]
+    public class RunAbility : BaseAbility
     {
 
-        public float jumpForce = 10f;
-        public ForceMode2D forceMode = ForceMode2D.Impulse;
+        public float accelarationForce = 1000f;
+        public ForceMode2D forceMode = ForceMode2D.Force;
 
         public override void Activate(AbilityHolder holder)
         {
@@ -17,7 +17,7 @@ namespace Abilities.Attributes
             {
                 return;
             }
-            body.AddForce(new Vector2(0f, jumpForce), forceMode);
+            body.AddForce(new Vector2(body.velocity.x * accelarationForce, 0f));
         }
     }
 }

@@ -587,6 +587,7 @@ MonoBehaviour:
   maxSpeed: 4
   maxAcceleration: 35
   maxAirAcceleration: 20
+  maxRunningAcceleration: 70
 --- !u!114 &378680938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -998,6 +999,8 @@ GameObject:
   - component: {fileID: 560053035}
   - component: {fileID: 560053036}
   - component: {fileID: 560053037}
+  - component: {fileID: 560053039}
+  - component: {fileID: 560053038}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -1261,8 +1264,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 4
-  maxAcceleration: 35
+  maxAcceleration: 100
   maxAirAcceleration: 20
+  maxRunningAcceleration: 70
 --- !u!114 &560053032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1376,13 +1380,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187d46d6d9c3e4b759c07f07b579212d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runBuffer: 5
-  collisionDataRetriever: {fileID: 0}
-  body: {fileID: 0}
-  controller: {fileID: 0}
-  velocity: {x: 0, y: 0}
-  onGround: 0
-  isRunning: 0
+--- !u!114 &560053038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560053025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e72c7b97f92464cf282efa993765815f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Owner: {fileID: 560053039}
+  Ability: {fileID: 11400000, guid: 50880cbf1a8f24abeaf0a6486f303d48, type: 2}
+  CurrentAbilityState: 0
+  OnTriggerAbility:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &560053039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560053025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a82c50cffb845f08ecf50d40574421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
 --- !u!1 &694589496
 GameObject:
   m_ObjectHideFlags: 0
@@ -1553,7 +1581,7 @@ GameObject:
   - component: {fileID: 823889577}
   - component: {fileID: 823889576}
   - component: {fileID: 823889575}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wall Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

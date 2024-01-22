@@ -1,3 +1,8 @@
+using System;
+using Abilities.Attributes;
+using Abilities.System;
+using Checks;
+using Controllers;
 using UnityEngine;
 
 namespace Capabilities {
@@ -5,8 +10,11 @@ namespace Capabilities {
     public class Move : MonoBehaviour
     {
         [SerializeField, Range(0f, 100f)] private float maxSpeed = 4f;
+        [SerializeField, Range(0f, 100f)] private float maxIdleSpeed = 4f;
+        [SerializeField, Range(0f, 100f)] private float maxRunningSpeed = 8f;
         [SerializeField, Range(0f, 100f)] private float maxAcceleration = 35f;
         [SerializeField, Range(0f, 100f)] private float maxAirAcceleration = 20f;
+        [SerializeField, Range(0f, 100f)] private float maxRunningAcceleration = 70f;
 
         private Vector2 direction;
         private Vector2 desiredVelocity;
@@ -14,6 +22,7 @@ namespace Capabilities {
         private Rigidbody2D body;
         private Controller controller;
         private CollisionDataRetriever ground;
+        private AbilityHolder abilityHolder;
 
         private float maxSpeedChange;
         private float acceleration;
@@ -25,6 +34,7 @@ namespace Capabilities {
             body = GetComponent<Rigidbody2D>();
             ground = GetComponent<CollisionDataRetriever>();
             controller = GetComponent<Controller>();
+            abilityHolder = GetComponent<AbilityHolder>();
         }
 
         // Update is called once per frame
@@ -39,12 +49,20 @@ namespace Capabilities {
             onGround = ground.OnGround;
             velocity = body.velocity;
 
-            acceleration = onGround ? maxAcceleration : maxAirAcceleration;
+            if (controller.input.RetrieveRunInput(this.gameObject))
+            {
+                acceleration = onGround ? maxRunningAcceleration : maxAirAcceleration;
+                maxSpeed = maxRunningSpeed;
+            } 
+            else{
+                acceleration = onGround ? maxAcceleration : maxAirAcceleration;
+                maxSpeed = maxIdleSpeed;
+            }
             maxSpeedChange = acceleration * Time.deltaTime;
             velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
 
-            
             body.velocity = velocity;
         }
+
     }
 }

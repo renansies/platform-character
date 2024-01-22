@@ -1,3 +1,7 @@
+using Abilities.Attributes;
+using Abilities.System;
+using Checks;
+using Controllers;
 using UnityEngine;
 
 namespace Capabilities
@@ -21,6 +25,7 @@ namespace Capabilities
         private CollisionDataRetriever collisionDataRetriever;
         private Rigidbody2D body;
         private Controller controller;
+        private AbilityHolder abilityHolder;
         private Vector2 velocity;
         private bool onWall;
         private bool onGround;
@@ -35,6 +40,7 @@ namespace Capabilities
             collisionDataRetriever = GetComponent<CollisionDataRetriever>();
             body = GetComponent<Rigidbody2D>();
             controller = GetComponent<Controller>();
+            abilityHolder = GetComponent<AbilityHolder>();
 
             isJumpReset = true;
         }
@@ -121,10 +127,13 @@ namespace Capabilities
                     wallStickCounter = wallStickTime;
                 }
             }
-            Debug.Log(wallStickCounter);
             #endregion
 
             body.velocity = velocity;
+            // if (abilityHolder.Ability?.GetType() != typeof(SpiderGripAbility))
+            // {
+            //     abilityHolder.TriggerAbility(); 
+            // }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
