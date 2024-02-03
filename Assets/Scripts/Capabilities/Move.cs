@@ -42,6 +42,10 @@ namespace Capabilities {
         {
             direction.x = controller.input.RetrieveMoveInput(this.gameObject);
             desiredVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - ground.Friction, 0f);
+            if (direction.x < 0) 
+            {
+                transform.Rotate(0, 180, 0);
+            }
         }
 
         private void FixedUpdate()

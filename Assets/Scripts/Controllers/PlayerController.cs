@@ -9,6 +9,7 @@ namespace Controllers
         private PlayerInputActions inputActions;
         private bool isJumping;
         private bool isRunning;
+        private bool isFiring;
 
         private void OnEnable()
         {
@@ -18,6 +19,8 @@ namespace Controllers
             inputActions.GamePlay.Jump.canceled += JumpCanceled;
             inputActions.GamePlay.Run.started += RunStarted;
             inputActions.GamePlay.Run.canceled += RunCanceled;
+            inputActions.GamePlay.Fire.started += FireStarted;
+            inputActions.GamePlay.Fire.canceled += FireCanceled;
         }
 
         private void OnDisable()
@@ -27,6 +30,8 @@ namespace Controllers
             inputActions.GamePlay.Jump.canceled -= JumpCanceled;
             inputActions.GamePlay.Run.started -= RunStarted;
             inputActions.GamePlay.Run.canceled -= RunCanceled;
+            inputActions.GamePlay.Fire.started -= FireStarted;
+            inputActions.GamePlay.Fire.canceled -= FireCanceled;
             inputActions = null;
         }
 
@@ -59,6 +64,19 @@ namespace Controllers
         public override bool RetrieveRunInput(GameObject gameObject)
         {
             return isRunning;
+        }
+
+        private void FireStarted(CallbackContext obj)
+        {
+            isFiring = true;
+        }
+        private void FireCanceled(CallbackContext obj)
+        {
+            isFiring = false;
+        }
+        public override bool RetrieveFireInput(GameObject gameObject)
+        {
+            return isFiring;
         }
     }
 }

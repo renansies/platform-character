@@ -43,5 +43,10 @@ namespace Controllers
         {
             return false;
         }
+
+        public override bool RetrieveFireInput(GameObject gameObject)
+        {
+            return false;
+        }
     }
 }
