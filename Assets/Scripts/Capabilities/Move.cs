@@ -22,7 +22,6 @@ namespace Capabilities {
         private Rigidbody2D body;
         private Controller controller;
         private CollisionDataRetriever ground;
-        private AbilityHolder abilityHolder;
 
         private float maxSpeedChange;
         private float acceleration;
@@ -34,7 +33,6 @@ namespace Capabilities {
             body = GetComponent<Rigidbody2D>();
             ground = GetComponent<CollisionDataRetriever>();
             controller = GetComponent<Controller>();
-            abilityHolder = GetComponent<AbilityHolder>();
         }
 
         // Update is called once per frame
@@ -42,10 +40,7 @@ namespace Capabilities {
         {
             direction.x = controller.input.RetrieveMoveInput(this.gameObject);
             desiredVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - ground.Friction, 0f);
-            if (direction.x < 0) 
-            {
-                transform.Rotate(0, 180, 0);
-            }
+            Flip();
         }
 
         private void FixedUpdate()
@@ -66,6 +61,18 @@ namespace Capabilities {
             velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
 
             body.velocity = velocity;
+        }
+
+        private void Flip()
+        {
+            if (direction.x < 0) 
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            if (direction.x > 0)
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
         }
 
     }

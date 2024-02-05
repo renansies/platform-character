@@ -1736,6 +1736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69dcbe15ce9dd4c64b70074f8e28997b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Character: {fileID: 560053030}
   ShootingPoint: {fileID: 606381966}
   projectile: {fileID: 3751615846307323711, guid: 7257e028b4f2b45ec9dd5b4c0113e195, type: 3}
 --- !u!1 &606381965
